@@ -463,6 +463,7 @@
                 }
 
                 bookingsList.classList.add('hidden');
+                completedBookings.classList.add('hidden');
                 scannerView.classList.add('hidden');
                 bookingDetail.classList.remove('hidden');
             } catch (error) {
@@ -476,6 +477,7 @@
             bookingDetail.classList.add('hidden');
             scannerView.classList.add('hidden');
             bookingsList.classList.remove('hidden');
+            completedBookings.classList.remove('hidden');
             currentBooking = null;
         });
 
@@ -515,6 +517,7 @@
             }
 
             bookingsList.classList.add('hidden');
+            completedBookings.classList.add('hidden');
             bookingDetail.classList.add('hidden');
             scannerView.classList.remove('hidden');
 
