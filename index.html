@@ -477,6 +477,7 @@
             // Collect form data
             const formData = {
                 booking_id: bookingId,
+                customer_name: document.getElementById('customerName').value.trim(),
                 time_window: document.querySelector('input[name="window"]:checked').value,
                 vehicle_reg: vehicleReg.value.trim(),
                 vehicle_colour: vehicleColour.value === 'Other' ? otherColourInput.value.trim() : vehicleColour.value,
