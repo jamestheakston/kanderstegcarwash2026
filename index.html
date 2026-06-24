@@ -50,36 +50,45 @@
                     </div>
                     <div>
                         <h2 class="text-xl font-bold text-slate-900">Select Your Service Window</h2>
-                        <p class="text-xs text-slate-500">Each window is 1hr 30mins. Includes 30 min wash + 15 min buffer per vehicle.</p>
+                        <p class="text-xs text-slate-500">Saturday, July 5th, 2026 • 10:00 AM - 6:00 PM • Each window has 4 slots</p>
                     </div>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <label class="relative border-2 border-scoutPurple bg-scoutLightPurple/30 p-4 rounded-xl cursor-pointer flex flex-col justify-between hover:bg-scoutLightPurple/50 transition">
-                        <input type="radio" name="window" value="morning" class="absolute top-4 right-4 accent-scoutPurple" checked>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <label class="relative border-2 border-scoutPurple bg-scoutLightPurple/30 p-4 rounded-xl cursor-pointer flex flex-col justify-between hover:bg-scoutLightPurple/50 transition" data-window="window1">
+                        <input type="radio" name="window" value="window1" class="absolute top-4 right-4 accent-scoutPurple" checked>
                         <div>
-                            <span class="block font-bold text-scoutDarkPurple text-lg">Morning</span>
-                            <span class="block text-sm text-slate-600 mt-1">09:00 AM - 10:30 AM</span>
+                            <span class="block font-bold text-scoutDarkPurple text-lg">Window 1</span>
+                            <span class="block text-sm text-slate-600 mt-1">10:00 AM - 11:30 AM</span>
                         </div>
-                        <span class="inline-block mt-4 text-xs font-semibold bg-scoutPurple text-white px-2 py-0.5 rounded w-max">Slot Available</span>
+                        <span class="inline-block mt-4 text-xs font-semibold bg-scoutPurple text-white px-2 py-0.5 rounded w-max" id="slots-window1">Loading...</span>
                     </label>
 
-                    <label class="relative border-2 border-slate-200 p-4 rounded-xl cursor-pointer flex flex-col justify-between hover:border-scoutPurple/50 transition">
-                        <input type="radio" name="window" value="midday" class="absolute top-4 right-4 accent-scoutPurple">
+                    <label class="relative border-2 border-slate-200 p-4 rounded-xl cursor-pointer flex flex-col justify-between hover:border-scoutPurple/50 transition" data-window="window2">
+                        <input type="radio" name="window" value="window2" class="absolute top-4 right-4 accent-scoutPurple">
                         <div>
-                            <span class="block font-bold text-slate-800 text-lg">Midday</span>
-                            <span class="block text-sm text-slate-600 mt-1">11:00 AM - 12:30 PM</span>
+                            <span class="block font-bold text-slate-800 text-lg">Window 2</span>
+                            <span class="block text-sm text-slate-600 mt-1">12:00 PM - 01:30 PM</span>
                         </div>
-                        <span class="inline-block mt-4 text-xs font-semibold bg-scoutPurple text-white px-2 py-0.5 rounded w-max">Slot Available</span>
+                        <span class="inline-block mt-4 text-xs font-semibold bg-scoutPurple text-white px-2 py-0.5 rounded w-max" id="slots-window2">Loading...</span>
                     </label>
 
-                    <label class="relative border-2 border-slate-200 p-4 rounded-xl cursor-pointer flex flex-col justify-between hover:border-scoutPurple/50 transition">
-                        <input type="radio" name="window" value="afternoon" class="absolute top-4 right-4 accent-scoutPurple">
+                    <label class="relative border-2 border-slate-200 p-4 rounded-xl cursor-pointer flex flex-col justify-between hover:border-scoutPurple/50 transition" data-window="window3">
+                        <input type="radio" name="window" value="window3" class="absolute top-4 right-4 accent-scoutPurple">
                         <div>
-                            <span class="block font-bold text-slate-800 text-lg">Afternoon</span>
-                            <span class="block text-sm text-slate-600 mt-1">01:00 PM - 02:30 PM</span>
+                            <span class="block font-bold text-slate-800 text-lg">Window 3</span>
+                            <span class="block text-sm text-slate-600 mt-1">02:00 PM - 03:30 PM</span>
                         </div>
-                        <span class="inline-block mt-4 text-xs font-semibold bg-scoutPurple text-white px-2 py-0.5 rounded w-max">Slot Available</span>
+                        <span class="inline-block mt-4 text-xs font-semibold bg-scoutPurple text-white px-2 py-0.5 rounded w-max" id="slots-window3">Loading...</span>
+                    </label>
+
+                    <label class="relative border-2 border-slate-200 p-4 rounded-xl cursor-pointer flex flex-col justify-between hover:border-scoutPurple/50 transition" data-window="window4">
+                        <input type="radio" name="window" value="window4" class="absolute top-4 right-4 accent-scoutPurple">
+                        <div>
+                            <span class="block font-bold text-slate-800 text-lg">Window 4</span>
+                            <span class="block text-sm text-slate-600 mt-1">04:00 PM - 05:30 PM</span>
+                        </div>
+                        <span class="inline-block mt-4 text-xs font-semibold bg-scoutPurple text-white px-2 py-0.5 rounded w-max" id="slots-window4">Loading...</span>
                     </label>
                 </div>
             </section>
@@ -312,6 +321,41 @@
             'sb_publishable_npGkWJUYIKapr3oRqzM-WQ_gY3scOZD'
         );
 
+        // Load slot counts on page load
+        async function loadSlotCounts() {
+            try {
+                const { data, error } = await SupabaseClient
+                    .from('CLIENT-slots')
+                    .select('*');
+
+                if (error) throw error;
+
+                if (data && data.length > 0) {
+                    data.forEach(slot => {
+                        const slotElement = document.getElementById(`slots-${slot.window_id}`);
+                        if (slotElement) {
+                            const remaining = slot.total_slots - slot.booked_slots;
+                            slotElement.textContent = `${remaining} slots left`;
+                            
+                            // Disable window if no slots available
+                            const label = slotElement.closest('label');
+                            const radio = label.querySelector('input[type="radio"]');
+                            if (remaining === 0) {
+                                label.classList.add('opacity-50', 'cursor-not-allowed');
+                                radio.disabled = true;
+                                slotElement.classList.remove('bg-scoutPurple');
+                                slotElement.classList.add('bg-red-500');
+                            }
+                        }
+                    });
+                }
+            } catch (error) {
+                console.error('Error loading slot counts:', error);
+            }
+        }
+
+        loadSlotCounts();
+
         const bookingForm = document.getElementById('bookingForm');
         const waterTapCheckbox = document.getElementById('waterTapCheckbox');
         const errorModal = document.getElementById('errorModal');
@@ -471,6 +515,21 @@
         agreeAttendanceBtn.addEventListener('click', async function() {
             attendanceConfirmModal.classList.add('hidden');
             
+            const selectedWindow = document.querySelector('input[name="window"]:checked').value;
+            
+            // Check if slots are available before proceeding
+            const { data: slotData } = await SupabaseClient
+                .from('CLIENT-slots')
+                .select('*')
+                .eq('window_id', selectedWindow)
+                .single();
+
+            if (!slotData || (slotData.total_slots - slotData.booked_slots) <= 0) {
+                alert('Sorry, this time window is now fully booked. Please select another window.');
+                loadSlotCounts();
+                return;
+            }
+
             // Generate 6-digit booking ID
             const bookingId = Math.floor(100000 + Math.random() * 900000).toString();
             
@@ -478,7 +537,7 @@
             const formData = {
                 booking_id: bookingId,
                 customer_name: document.getElementById('customerName').value.trim(),
-                time_window: document.querySelector('input[name="window"]:checked').value,
+                time_window: selectedWindow,
                 vehicle_reg: vehicleReg.value.trim(),
                 vehicle_colour: vehicleColour.value === 'Other' ? otherColourInput.value.trim() : vehicleColour.value,
                 address: address.value.trim(),
@@ -495,6 +554,12 @@
                 if (error) throw error;
 
                 if (data && data.length > 0) {
+                    // Increment the booked_slots count
+                    await SupabaseClient
+                        .from('CLIENT-slots')
+                        .update({ booked_slots: slotData.booked_slots + 1 })
+                        .eq('window_id', selectedWindow);
+                    
                     // Redirect to booking confirmation page
                     window.location.href = `/booking?id=${bookingId}&bookednow=true`;
                 } else {
