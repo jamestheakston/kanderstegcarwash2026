@@ -578,6 +578,7 @@
             };
 
             try {
+                // Insert into CLIENT-bookings
                 const { data, error } = await SupabaseClient
                     .from('CLIENT-bookings')
                     .insert([formData])
@@ -586,6 +587,13 @@
                 if (error) throw error;
 
                 if (data && data.length > 0) {
+                    // Insert into ADMIN-bookings
+                    const { error: adminError } = await SupabaseClient
+                        .from('ADMIN-bookings')
+                        .insert([formData]);
+
+                    if (adminError) throw adminError;
+
                     // Increment the booked_slots count
                     await SupabaseClient
                         .from('CLIENT-slots')
