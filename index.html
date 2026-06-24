@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ScoutWash Booking</title>
+    <title>Kandersteg 2027 Fundraiser Car Wash</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -27,9 +27,9 @@
         <div class="max-w-4xl mx-auto px-4 py-6 flex items-center justify-between">
             <div class="flex items-center space-x-3">
                 <i class="fas fa-car-wash text-3xl"></i>
-                <h1 class="text-2xl font-bold tracking-tight">ScoutWash</h1>
+                <h1 class="text-2xl font-bold tracking-tight">Kandersteg 2027 Fundraiser Car Wash</h1>
             </div>
-            <span class="bg-white text-scoutPurple text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Scout Group Fundraiser</span>
+            <span class="bg-white text-scoutPurple text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Kandersteg 2027 Fundraiser</span>
         </div>
     </header>
 
@@ -55,37 +55,37 @@
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <label class="relative border-2 border-scoutPurple bg-scoutLightPurple/30 p-4 rounded-xl cursor-pointer flex flex-col justify-between hover:bg-scoutLightPurple/50 transition" data-window="window1">
+                    <label class="window-label relative border-2 border-slate-200 p-4 rounded-xl cursor-pointer flex flex-col justify-between hover:border-scoutPurple/50 transition" data-window="window1">
                         <input type="radio" name="window" value="window1" class="absolute top-4 right-4 accent-scoutPurple" checked>
                         <div>
-                            <span class="block font-bold text-scoutDarkPurple text-lg">Window 1</span>
+                            <span class="block font-bold text-slate-800 text-lg window-title">Window 1</span>
                             <span class="block text-sm text-slate-600 mt-1">10:00 AM - 11:30 AM</span>
                         </div>
                         <span class="inline-block mt-4 text-xs font-semibold bg-scoutPurple text-white px-2 py-0.5 rounded w-max" id="slots-window1">Loading...</span>
                     </label>
 
-                    <label class="relative border-2 border-slate-200 p-4 rounded-xl cursor-pointer flex flex-col justify-between hover:border-scoutPurple/50 transition" data-window="window2">
+                    <label class="window-label relative border-2 border-slate-200 p-4 rounded-xl cursor-pointer flex flex-col justify-between hover:border-scoutPurple/50 transition" data-window="window2">
                         <input type="radio" name="window" value="window2" class="absolute top-4 right-4 accent-scoutPurple">
                         <div>
-                            <span class="block font-bold text-slate-800 text-lg">Window 2</span>
+                            <span class="block font-bold text-slate-800 text-lg window-title">Window 2</span>
                             <span class="block text-sm text-slate-600 mt-1">12:00 PM - 01:30 PM</span>
                         </div>
                         <span class="inline-block mt-4 text-xs font-semibold bg-scoutPurple text-white px-2 py-0.5 rounded w-max" id="slots-window2">Loading...</span>
                     </label>
 
-                    <label class="relative border-2 border-slate-200 p-4 rounded-xl cursor-pointer flex flex-col justify-between hover:border-scoutPurple/50 transition" data-window="window3">
+                    <label class="window-label relative border-2 border-slate-200 p-4 rounded-xl cursor-pointer flex flex-col justify-between hover:border-scoutPurple/50 transition" data-window="window3">
                         <input type="radio" name="window" value="window3" class="absolute top-4 right-4 accent-scoutPurple">
                         <div>
-                            <span class="block font-bold text-slate-800 text-lg">Window 3</span>
+                            <span class="block font-bold text-slate-800 text-lg window-title">Window 3</span>
                             <span class="block text-sm text-slate-600 mt-1">02:00 PM - 03:30 PM</span>
                         </div>
                         <span class="inline-block mt-4 text-xs font-semibold bg-scoutPurple text-white px-2 py-0.5 rounded w-max" id="slots-window3">Loading...</span>
                     </label>
 
-                    <label class="relative border-2 border-slate-200 p-4 rounded-xl cursor-pointer flex flex-col justify-between hover:border-scoutPurple/50 transition" data-window="window4">
+                    <label class="window-label relative border-2 border-slate-200 p-4 rounded-xl cursor-pointer flex flex-col justify-between hover:border-scoutPurple/50 transition" data-window="window4">
                         <input type="radio" name="window" value="window4" class="absolute top-4 right-4 accent-scoutPurple">
                         <div>
-                            <span class="block font-bold text-slate-800 text-lg">Window 4</span>
+                            <span class="block font-bold text-slate-800 text-lg window-title">Window 4</span>
                             <span class="block text-sm text-slate-600 mt-1">04:00 PM - 05:30 PM</span>
                         </div>
                         <span class="inline-block mt-4 text-xs font-semibold bg-scoutPurple text-white px-2 py-0.5 rounded w-max" id="slots-window4">Loading...</span>
@@ -312,7 +312,8 @@
 
 
     <footer class="bg-slate-100 border-t border-slate-200 mt-12 py-6 text-center text-sm text-slate-500">
-        <p>&copy; 2026 ScoutWash UK. All rights reserved. Helping support local scouts activities.</p>
+        <p>&copy; 2026 Kandersteg 2027 Fundraiser Car Wash. All rights reserved.</p>
+        <p class="mt-2">Website designed by <a href="https://jamesstudio.pages.dev" target="_blank" class="text-scoutPurple hover:text-scoutDarkPurple underline">James Theakston</a></p>
     </footer>
 
     <script>
@@ -355,6 +356,37 @@
         }
 
         loadSlotCounts();
+
+        // Handle window selection highlighting
+        const windowRadios = document.querySelectorAll('input[name="window"]');
+        windowRadios.forEach(radio => {
+            radio.addEventListener('change', function() {
+                // Remove selected styling from all labels
+                document.querySelectorAll('.window-label').forEach(label => {
+                    label.classList.remove('border-scoutPurple', 'bg-scoutLightPurple/30');
+                    label.classList.add('border-slate-200');
+                    label.querySelector('.window-title').classList.remove('text-scoutDarkPurple');
+                    label.querySelector('.window-title').classList.add('text-slate-800');
+                });
+
+                // Add selected styling to the selected label
+                const selectedLabel = this.closest('.window-label');
+                selectedLabel.classList.remove('border-slate-200');
+                selectedLabel.classList.add('border-scoutPurple', 'bg-scoutLightPurple/30');
+                selectedLabel.querySelector('.window-title').classList.remove('text-slate-800');
+                selectedLabel.querySelector('.window-title').classList.add('text-scoutDarkPurple');
+            });
+        });
+
+        // Initialize first window as selected
+        const firstRadio = document.querySelector('input[name="window"]:checked');
+        if (firstRadio) {
+            const selectedLabel = firstRadio.closest('.window-label');
+            selectedLabel.classList.remove('border-slate-200');
+            selectedLabel.classList.add('border-scoutPurple', 'bg-scoutLightPurple/30');
+            selectedLabel.querySelector('.window-title').classList.remove('text-slate-800');
+            selectedLabel.querySelector('.window-title').classList.add('text-scoutDarkPurple');
+        }
 
         const bookingForm = document.getElementById('bookingForm');
         const waterTapCheckbox = document.getElementById('waterTapCheckbox');
