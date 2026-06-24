@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin - ScoutWash</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚗</text></svg>">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -184,7 +185,7 @@
                             </div>
                         </div>
 
-                        <div class="mt-6 p-4 bg-amber-50 border border-amber-200 rounded-xl text-center">
+                        <div id="qrScanMessage" class="mt-6 p-4 bg-amber-50 border border-amber-200 rounded-xl text-center">
                             <p class="text-amber-700 text-sm">
                                 <i class="fas fa-qrcode mr-1"></i>
                                 Scan the client's QR code to mark this booking as completed
@@ -331,7 +332,7 @@
         }
 
         // Show Booking Detail
-        async function showBookingDetail(bookingId) {
+        async function showBookingDetail(bookingId, fromQrScan = false) {
             try {
                 const { data, error } = await SupabaseClient
                     .from('CLIENT-bookings')
@@ -363,13 +364,25 @@
                 document.getElementById('callBtn').href = `tel:${phoneClean}`;
                 document.getElementById('textBtn').href = `sms:${phoneClean}`;
 
-                // Show/hide complete button
+                // Show/hide complete button based on status and access method
                 if (data.status === 'completed') {
                     document.getElementById('markCompleteSection').classList.add('hidden');
                     document.getElementById('alreadyCompletedSection').classList.remove('hidden');
-                } else {
+                } else if (fromQrScan) {
+                    // Show mark complete button when accessed via QR scan
                     document.getElementById('markCompleteSection').classList.remove('hidden');
                     document.getElementById('alreadyCompletedSection').classList.add('hidden');
+                } else {
+                    // Hide mark complete button when accessed from list
+                    document.getElementById('markCompleteSection').classList.add('hidden');
+                    document.getElementById('alreadyCompletedSection').classList.add('hidden');
+                }
+
+                // Hide QR scan message if accessed via QR scan
+                if (fromQrScan) {
+                    document.getElementById('qrScanMessage').classList.add('hidden');
+                } else {
+                    document.getElementById('qrScanMessage').classList.remove('hidden');
                 }
 
                 bookingsList.classList.add('hidden');
@@ -396,7 +409,34 @@
         scanQrBtn.addEventListener('click', startScanner);
         closeScannerBtn.addEventListener('click', stopScanner);
 
-        function startScanner() {
+        async function startScanner() {
+            // Check camera permission first
+            try {
+                const permissionStatus = await navigator.permissions.query({ name: 'camera' });
+                
+                if (permissionStatus.state === 'denied') {
+                    alert('Camera permission is denied. Please enable camera permissions in your browser settings and try again.');
+                    return;
+                }
+
+                if (permissionStatus.state === 'prompt') {
+                    // Request permission
+                    const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
+                    // Stop the stream immediately, we just wanted to check permission
+                    stream.getTracks().forEach(track => track.stop());
+                }
+            } catch (err) {
+                // If permissions API is not supported, try to get media directly
+                try {
+                    const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
+                    stream.getTracks().forEach(track => track.stop());
+                } catch (mediaErr) {
+                    console.error("Camera access error:", mediaErr);
+                    alert("Unable to access camera. Please ensure camera permissions are granted.");
+                    return;
+                }
+            }
+
             bookingsList.classList.add('hidden');
             bookingDetail.classList.add('hidden');
             scannerView.classList.remove('hidden');
@@ -433,7 +473,7 @@
 
         function onScanSuccess(decodedText) {
             stopScanner();
-            showBookingDetail(decodedText);
+            showBookingDetail(decodedText, true);
         }
 
         function onScanFailure(error) {
