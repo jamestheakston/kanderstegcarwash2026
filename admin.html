@@ -511,7 +511,7 @@
                     stream.getTracks().forEach(track => track.stop());
                 } catch (mediaErr) {
                     console.error("Camera access error:", mediaErr);
-                    alert("Unable to access camera. Please ensure camera permissions are granted.");
+                    alert("Unable to access camera. Please ensure camera permissions are granted. Refresh the page to get asked again.");
                     return;
                 }
             }
