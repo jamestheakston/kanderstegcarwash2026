@@ -479,7 +479,7 @@
 
                 if (data && data.length > 0) {
                     // Redirect to booking confirmation page
-                    window.location.href = `/booking?id=${bookingId}`;
+                    window.location.href = `/booking?id=${bookingId}&bookednow=true`;
                 } else {
                     alert('There was an error processing your booking. Please try again.');
                 }
