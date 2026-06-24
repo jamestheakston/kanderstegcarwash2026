@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Confirmation - ScoutWash</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        scoutPurple: '#7413dc',
+                        scoutLightPurple: '#f3e8ff',
+                        scoutDarkPurple: '#5c0fa3',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col justify-between">
+
+    <header class="bg-scoutPurple text-white shadow-md">
+        <div class="max-w-4xl mx-auto px-4 py-6 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <i class="fas fa-car-wash text-3xl"></i>
+                <h1 class="text-2xl font-bold tracking-tight">ScoutWash</h1>
+            </div>
+            <span class="bg-white text-scoutPurple text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Scout Group Fundraiser</span>
+        </div>
+    </header>
+
+    <main class="max-w-2xl w-full mx-auto px-4 py-12 flex-grow">
+        <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 text-center">
+            <div class="bg-emerald-50 text-emerald-500 p-4 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-6">
+                <i class="fas fa-check-circle text-4xl"></i>
+            </div>
+            
+            <h2 class="text-2xl font-bold text-slate-900 mb-2">Booking Confirmed!</h2>
+            <p class="text-slate-600 mb-8">Your booking has been successfully received.</p>
+
+            <div class="bg-slate-50 p-6 rounded-xl border border-slate-200 mb-8">
+                <h3 class="font-semibold text-slate-900 mb-4">Your Booking ID</h3>
+                <div id="bookingIdDisplay" class="text-3xl font-mono font-bold text-scoutPurple mb-4 tracking-wider">Loading...</div>
+                
+                <div class="flex justify-center mb-4">
+                    <div id="qrcode" class="bg-white p-4 rounded-lg shadow-sm"></div>
+                </div>
+                
+                <p class="text-sm text-slate-500">Scan this QR code to view your booking details</p>
+            </div>
+
+            <div class="bg-amber-50 border border-amber-200 p-4 rounded-xl">
+                <div class="flex items-start space-x-3">
+                    <i class="fas fa-info-circle text-amber-600 text-xl mt-0.5"></i>
+                    <div class="text-left">
+                        <h4 class="font-semibold text-amber-800 mb-1">Need to Cancel?</h4>
+                        <p class="text-amber-700 text-sm">To cancel, please contact 2nd Timperley Scouts.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-slate-100 border-t border-slate-200 mt-12 py-6 text-center text-sm text-slate-500">
+        <p>&copy; 2026 ScoutWash UK. All rights reserved. Helping support local scouts activities.</p>
+    </footer>
+
+    <script>
+        // Parse booking ID from URL parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        const bookingId = urlParams.get('id');
+
+        if (bookingId) {
+            // Display booking ID
+            document.getElementById('bookingIdDisplay').textContent = bookingId;
+            
+            // Generate QR code
+            QRCode.toCanvas(document.createElement('canvas'), bookingId, {
+                width: 200,
+                margin: 2,
+                color: {
+                    dark: '#7413dc',
+                    light: '#ffffff'
+                }
+            }, function(error, canvas) {
+                if (error) {
+                    console.error(error);
+                    return;
+                }
+                const qrContainer = document.getElementById('qrcode');
+                qrContainer.innerHTML = '';
+                qrContainer.appendChild(canvas);
+            });
+        } else {
+            document.getElementById('bookingIdDisplay').textContent = 'No booking ID found';
+            document.getElementById('qrcode').innerHTML = '<p class="text-red-500 text-sm">Unable to generate QR code</p>';
+        }
+    </script>
+</body>
+</html>
