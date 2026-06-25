@@ -276,7 +276,7 @@
             </section>
 
             <div class="pt-4">
-                <button type="submit" class="w-full bg-scoutPurple hover:bg-scoutDarkPurple text-white font-bold py-4 px-6 rounded-xl shadow-lg hover:shadow-xl transition transform active:scale-[0.99] flex items-center justify-center space-x-2 text-lg">
+                <button type="submit" id="submitBtn" class="w-full bg-scoutPurple hover:bg-scoutDarkPurple text-white font-bold py-4 px-6 rounded-xl shadow-lg hover:shadow-xl transition transform active:scale-[0.99] flex items-center justify-center space-x-2 text-lg">
                     <i class="fas fa-calendar-check"></i>
                     <span>Confirm Booking</span>
                 </button>
@@ -633,6 +633,11 @@
                         'window3': '02:00 PM - 03:30 PM',
                         'window4': '04:00 PM - 05:30 PM'
                     };
+
+                    // Show loading state on button
+                    const submitBtn = document.getElementById('submitBtn');
+                    submitBtn.disabled = true;
+                    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i><span>Confirming</span>';
                     
                     try {
                         await emailjs.send('service_yn3gq3m', 'template_0ullso7', {
@@ -644,6 +649,10 @@
                     } catch (emailError) {
                         console.error('Email send error:', emailError);
                         // Don't block booking if email fails
+                    } finally {
+                        // Restore button state
+                        submitBtn.disabled = false;
+                        submitBtn.innerHTML = '<i class="fas fa-calendar-check"></i><span>Confirm Booking</span>';
                     }
                     
                     // Redirect to booking confirmation page
