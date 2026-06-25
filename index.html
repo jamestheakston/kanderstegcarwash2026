@@ -383,13 +383,8 @@
 
         loadSlotCounts();
 
-        // Real-time subscription for slot updates
-        SupabaseClient
-            .channel('slots-changes')
-            .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'CLIENT-slots' }, (payload) => {
-                loadSlotCounts();
-            })
-            .subscribe();
+        // Poll slot counts every 5 seconds to prevent overbooking
+        setInterval(loadSlotCounts, 5000);
 
         // Handle window selection highlighting
         const windowRadios = document.querySelectorAll('input[name="window"]');
