@@ -22,14 +22,9 @@
 </head>
 <body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col">
 
-    <!-- Hero Section with Images -->
+    <!-- Hero Section -->
     <div class="relative overflow-hidden flex-grow">
         <div class="absolute inset-0 bg-gradient-to-br from-scoutLightPurple/50 to-slate-100"></div>
-        
-        <!-- Background Images -->
-        <div class="absolute inset-0 opacity-10">
-            <img src="https://ichef.bbci.co.uk/ace/standard/871/cpsprodpb/5094/live/821940e0-0042-11f0-982a-afa50108dc2a.jpg" alt="Scouts" class="w-full h-full object-cover">
-        </div>
         
         <div class="relative max-w-4xl mx-auto px-4 py-16 md:py-24">
             <div class="text-left">
@@ -41,10 +36,35 @@
                 <h2 class="text-3xl font-semibold text-slate-700 mb-4">Page Not Found</h2>
                 <p class="text-slate-500 text-lg mb-8">Sorry, the page you're looking for doesn't exist or has been moved. Let's get you back on track!</p>
                 
-                <a href="/" class="inline-flex items-center space-x-2 bg-scoutPurple hover:bg-scoutDarkPurple text-white font-bold py-4 px-8 rounded-xl shadow-lg hover:shadow-xl transition transform active:scale-[0.99] text-lg">
+                <a href="/" class="inline-flex items-center space-x-2 bg-scoutPurple hover:bg-scoutDarkPurple text-white font-bold py-4 px-8 rounded-xl shadow-lg hover:shadow-xl transition transform active:scale-[0.99] text-lg mb-12">
                     <i class="fas fa-home"></i>
                     <span>Back to Home</span>
                 </a>
+
+                <!-- Quick Links -->
+                <div class="mt-12 pt-8 border-t border-slate-200">
+                    <h3 class="text-xl font-semibold text-slate-800 mb-4">Quick Links</h3>
+                    <div class="grid sm:grid-cols-2 gap-4">
+                        <a href="/" class="flex items-center space-x-3 p-4 bg-white rounded-xl border border-slate-200 hover:border-scoutPurple hover:shadow-md transition">
+                            <div class="bg-scoutLightPurple text-scoutPurple p-3 rounded-lg">
+                                <i class="fas fa-calendar-plus"></i>
+                            </div>
+                            <div>
+                                <p class="font-semibold text-slate-800">Book a Car Wash</p>
+                                <p class="text-sm text-slate-500">Schedule your appointment</p>
+                            </div>
+                        </a>
+                        <a href="/booking" onclick="promptBookingId(event)" class="flex items-center space-x-3 p-4 bg-white rounded-xl border border-slate-200 hover:border-scoutPurple hover:shadow-md transition cursor-pointer">
+                            <div class="bg-scoutLightPurple text-scoutPurple p-3 rounded-lg">
+                                <i class="fas fa-qrcode"></i>
+                            </div>
+                            <div>
+                                <p class="font-semibold text-slate-800">View Booking</p>
+                                <p class="text-sm text-slate-500">Check your booking details</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -54,6 +74,74 @@
         <p>&copy; 2026 Kandersteg 2027 Fundraiser Car Wash. All rights reserved.</p>
         <p class="mt-2">Website designed by <a href="https://jamesstudio.pages.dev" target="_blank" class="text-scoutPurple hover:text-scoutDarkPurple underline">James Theakston</a></p>
     </footer>
+
+    <!-- Booking ID Modal -->
+    <div id="bookingModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100 transform scale-95 duration-300">
+            <div class="text-center mb-6">
+                <div class="bg-scoutLightPurple text-scoutPurple p-4 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-qrcode text-2xl"></i>
+                </div>
+                <h3 class="text-xl font-bold text-slate-900 mb-2">View Your Booking</h3>
+                <p class="text-slate-600 text-sm">Enter your 6-digit booking ID to view your booking details</p>
+            </div>
+            
+            <div class="space-y-4">
+                <div>
+                    <input type="text" id="bookingIdInput" maxlength="6" placeholder="Enter booking ID" class="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-scoutPurple focus:bg-white transition text-lg text-center font-mono tracking-wider">
+                </div>
+                <div class="flex space-x-3">
+                    <button onclick="closeBookingModal()" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold py-3 px-4 rounded-xl transition">
+                        Cancel
+                    </button>
+                    <button onclick="submitBookingId()" class="flex-1 bg-scoutPurple hover:bg-scoutDarkPurple text-white font-semibold py-3 px-4 rounded-xl transition">
+                        View Booking
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function promptBookingId(event) {
+            event.preventDefault();
+            document.getElementById('bookingModal').classList.remove('hidden');
+            document.getElementById('bookingIdInput').value = '';
+            document.getElementById('bookingIdInput').focus();
+        }
+
+        function closeBookingModal() {
+            document.getElementById('bookingModal').classList.add('hidden');
+        }
+
+        function submitBookingId() {
+            const bookingId = document.getElementById('bookingIdInput').value.trim();
+            if (bookingId) {
+                window.location.href = `/booking?id=${bookingId}`;
+            }
+        }
+
+        // Close modal on escape key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeBookingModal();
+            }
+        });
+
+        // Close modal when clicking outside
+        document.getElementById('bookingModal').addEventListener('click', function(event) {
+            if (event.target === this) {
+                closeBookingModal();
+            }
+        });
+
+        // Allow Enter key to submit
+        document.getElementById('bookingIdInput').addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                submitBookingId();
+            }
+        });
+    </script>
 
 </body>
 </html>
