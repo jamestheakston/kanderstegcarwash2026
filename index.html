@@ -7,6 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -236,7 +237,7 @@
                     </div>
 
                     <div>
-                        <label class="block text-sm font-semibold text-slate-700 mb-2">Phone Number (For Texts AND CALLS)</label>
+                        <label class="block text-sm font-semibold text-slate-700 mb-2">Phone Number</label>
                         <div class="relative">
                             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
                                <i class="fas fa-mobile-alt"></i>
@@ -247,7 +248,29 @@
                             <i class="fas fa-times-circle"></i>
                             <span>Please enter a valid UK phone number (10 or 11 digits starting with 0 or +44).</span>
                         </p>
-                        <span class="text-xs text-slate-500 mt-2 block"><i class="fas fa-info-circle mr-1 text-scoutPurple"></i> Necessary for text confirmations and direct voice calls when we arrive at your address.</span>
+                        <span class="text-xs text-slate-500 mt-2 block"><i class="fas fa-info-circle mr-1 text-scoutPurple"></i> We may contact you if we need to reach you about your booking.</span>
+                    </div>
+                </div>
+            </section>
+
+            <section class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                <div class="flex items-center space-x-3 mb-6">
+                    <div class="bg-emerald-50 text-emerald-600 p-3 rounded-xl">
+                        <i class="fas fa-credit-card text-xl"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-xl font-bold text-slate-900">Payment</h2>
+                        <p class="text-xs text-slate-500">Payment details</p>
+                    </div>
+                </div>
+
+                <div class="bg-emerald-50 border border-emerald-200 p-4 rounded-xl">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-semibold text-emerald-800">Car Wash Service</p>
+                            <p class="text-xs text-emerald-600 mt-1">£10 cash only - Pay on the day of the event</p>
+                        </div>
+                        <div class="text-2xl font-bold text-emerald-700">£10</div>
                     </div>
                 </div>
             </section>
@@ -255,7 +278,7 @@
             <div class="pt-4">
                 <button type="submit" class="w-full bg-scoutPurple hover:bg-scoutDarkPurple text-white font-bold py-4 px-6 rounded-xl shadow-lg hover:shadow-xl transition transform active:scale-[0.99] flex items-center justify-center space-x-2 text-lg">
                     <i class="fas fa-calendar-check"></i>
-                    <span>Confirm Booking (and pay £10 on day of event)</span>
+                    <span>Confirm Booking</span>
                 </button>
             </div>
         </form>
@@ -317,6 +340,9 @@
     </footer>
 
     <script>
+        // Initialize EmailJS
+        emailjs.init('uF5gBRgWvS-o3wTjZ');
+
         const SupabaseClient = supabase.createClient(
             'https://psctfdryghnvvmaclxwl.supabase.co',
             'sb_publishable_npGkWJUYIKapr3oRqzM-WQ_gY3scOZD'
@@ -599,6 +625,26 @@
                         .from('CLIENT-slots')
                         .update({ booked_slots: slotData.booked_slots + 1 })
                         .eq('window_id', selectedWindow);
+
+                    // Send confirmation email via EmailJS
+                    const timeWindowMap = {
+                        'window1': '10:00 AM - 11:30 AM',
+                        'window2': '12:00 PM - 01:30 PM',
+                        'window3': '02:00 PM - 03:30 PM',
+                        'window4': '04:00 PM - 05:30 PM'
+                    };
+                    
+                    try {
+                        await emailjs.send('service_yn3gq3m', 'template_0ullso7', {
+                            name: document.getElementById('customerName').value.trim(),
+                            phone: phoneNumber.value.trim(),
+                            window: timeWindowMap[selectedWindow],
+                            booking_id: bookingId
+                        });
+                    } catch (emailError) {
+                        console.error('Email send error:', emailError);
+                        // Don't block booking if email fails
+                    }
                     
                     // Redirect to booking confirmation page
                     window.location.href = `/booking?id=${bookingId}&bookednow=true`;
